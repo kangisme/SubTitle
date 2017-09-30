@@ -52,6 +52,11 @@ public class SubTitleModel
 //        this.type = type;
 //    }
 
+    public int getLanguageNum()
+    {
+        return dialog.size();
+    }
+
     public String getDialog(int index)
     {
         return dialog.get(index);

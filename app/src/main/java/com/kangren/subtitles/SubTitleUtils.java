@@ -26,7 +26,7 @@ public class SubTitleUtils
         if (date == null)
         {
             return -1;
-        }
+    }
         else
         {
             String[] temp = date.split(":");

@@ -20,7 +20,7 @@ public class ASSParser implements ISubTitleParser
     @Override
     public List<SubTitleModel> getSubTitle(String path)
     {
-        String pattern = "Dialogue: \\d,[0-9]:\\d{2}:\\d{2}\\.\\d{2},[0-9]:\\d{2}:\\d{2}\\.\\d{2},Default,,0,0,0,,\\{\\\\blur3\\}.{0,}";
+        String pattern = "Dialogue: \\d,[0-9]:\\d{2}:\\d{2}\\.\\d{2},[0-9]:\\d{2}:\\d{2}\\.\\d{2}.{0,}";
         Pattern r = Pattern.compile(pattern);
         List<SubTitleModel> list = new ArrayList<>();
         BufferedReader reader = null;

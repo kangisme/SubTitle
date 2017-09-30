@@ -171,8 +171,9 @@ public class SubTitleView extends AppCompatTextView
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN && currentTitle != null)
         {
+            language = (language + 1) % currentTitle.getLanguageNum();
         }
         return super.onTouchEvent(event);
     }
