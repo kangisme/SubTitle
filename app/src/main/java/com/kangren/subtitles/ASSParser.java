@@ -1,6 +1,7 @@
 package com.kangren.subtitles;
 
-import static com.kangren.subtitles.SubTitleUtils.dateFormat;
+import static com.kangren.subtitles.utils.SubTitleUtils.dateFormat;
+import static com.kangren.subtitles.utils.SubTitleUtils.stringFormat;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,8 +12,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.kangren.subtitles.utils.CloseUtils;
+
 /**
- * ASS格式字幕解析器 Created by kangren on 2017/9/29.
+ * ASS格式字幕解析器
+ * Created by kangren on 2017/9/29.
  */
 
 public class ASSParser implements ISubTitleParser
@@ -38,7 +42,7 @@ public class ASSParser implements ISubTitleParser
                     SubTitleModel subTitleModel = new SubTitleModel();
                     subTitleModel.setStartTime(dateFormat(temp[1]));
                     subTitleModel.setEndTime(dateFormat(temp[2]));
-                    subTitleModel.addDialog(temp[9].substring(8));
+                    subTitleModel.addDialog(stringFormat(temp[9]));
                     list.add(subTitleModel);
                 }
             }
@@ -49,17 +53,18 @@ public class ASSParser implements ISubTitleParser
         }
         finally
         {
-            try
-            {
-                if (reader != null)
-                {
-                    reader.close();
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            CloseUtils.closeQuietly(reader);
+            // try
+            // {
+            // if (reader != null)
+            // {
+            // reader.close();
+            // }
+            // }
+            // catch (IOException e)
+            // {
+            // e.printStackTrace();
+            // }
         }
         return list;
     }

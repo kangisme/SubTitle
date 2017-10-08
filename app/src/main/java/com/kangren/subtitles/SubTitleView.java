@@ -1,13 +1,8 @@
 package com.kangren.subtitles;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -25,12 +20,9 @@ public class SubTitleView extends AppCompatTextView
 
     private Context mContext;
 
-    // 回调接口
-    private IPositionCallBack iPositionCallBack;
-
     private ISubTitleParser iSubTitleParser;
 
-    //字母列表
+    // 字母列表
     private List<SubTitleModel> modelList;
 
     // 当前显示的语言
@@ -42,27 +34,8 @@ public class SubTitleView extends AppCompatTextView
     // 当前字幕索引
     private int currentIndex;
 
-    private Timer timer;
-
-    private Handler handler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg)
-        {
-            super.handleMessage(msg);
-            long i = iPositionCallBack.getPlayerPosition();
-            currentTitle = getCurrentTitle(i);
-            if (currentTitle != null)
-            {
-                setText(currentTitle.getDialog(language));
-            }
-            else
-            {
-                setText("");
-            }
-            Log.d("kang", i + "");
-        }
-    };
+    // 字幕时间调整
+    private int adjust;
 
     private SubTitleView(Context context)
     {
@@ -77,6 +50,35 @@ public class SubTitleView extends AppCompatTextView
     private SubTitleView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+    }
+
+    public void preAdjust()
+    {
+        adjust = adjust + 500;
+    }
+
+    public void delayAdjust()
+    {
+        adjust = adjust - 500;
+    }
+
+    public void resetAdjust()
+    {
+        adjust = 0;
+    }
+
+    public void setSubTitle(long currentPosition)
+    {
+        currentTitle = getCurrentTitle(currentPosition + adjust);
+        if (currentTitle != null)
+        {
+            setText(currentTitle.getDialog(language));
+        }
+        else
+        {
+            setText("");
+        }
+        Log.d("kang", currentPosition + "");
     }
 
     /**
@@ -137,37 +139,6 @@ public class SubTitleView extends AppCompatTextView
         modelList = iSubTitleParser.getSubTitle(SUBTITLE_PATH);
     }
 
-    /**
-     * 开始播放字幕
-     */
-    public void start()
-    {
-        if (timer == null)
-        {
-            timer = new Timer();
-            timer.schedule(new TimerTask()
-            {
-                @Override
-                public void run()
-                {
-                    handler.sendEmptyMessage(0);
-                }
-            }, 0, 100);
-        }
-    }
-
-    /**
-     * 结束播放字幕
-     */
-    public void end()
-    {
-        if (timer != null)
-        {
-            timer.cancel();
-            timer = null;
-        }
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -209,12 +180,6 @@ public class SubTitleView extends AppCompatTextView
         public Builder setSubTitleParser(ISubTitleParser iSubTitleParser)
         {
             view.iSubTitleParser = iSubTitleParser;
-            return this;
-        }
-
-        public Builder setPositionCallBack(IPositionCallBack iPositionCallBack)
-        {
-            view.iPositionCallBack = iPositionCallBack;
             return this;
         }
 

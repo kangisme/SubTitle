@@ -1,20 +1,25 @@
-package com.kangren.subtitles;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.kangren.subtitles.utils;
 
 /**
- * 字幕控制类 Created by kangren on 2017/9/25.
+ * 工具类
+ * Created by kangren on 2017/9/25.
  */
 
 public class SubTitleUtils
 {
+    /**
+     * 去除{\...}字幕样式定义
+     * 
+     * @param subtitle
+     * @return
+     */
+    public static String stringFormat(String subtitle)
+    {
+        // return
+        // Pattern.compile("\\{\\\\.{0,}?\\}").matcher(subtitle).replaceAll("");
+        return subtitle.replaceAll("\\{\\\\.{0,}?\\}", "");
+    }
+
     /**
      * 将String格式时间转换为毫秒时间
      * 
@@ -26,7 +31,7 @@ public class SubTitleUtils
         if (date == null)
         {
             return -1;
-    }
+        }
         else
         {
             String[] temp = date.split(":");
