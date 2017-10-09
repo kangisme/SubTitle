@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 文件目录界面
@@ -58,8 +59,7 @@ public class FileActivity extends Activity
         currentCatalog = (TextView) findViewById(R.id.current_catalog);
         listFiles = (ListView) findViewById(R.id.list_file);
         back = (Button) findViewById(R.id.back);
-        adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.activity_list_item, android.R.id.text1,
-                list);
+        adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.simple_list_item_1, list);
         listFiles.setAdapter(adapter);
         currentCatalog.setText(currentCatalogS);
         // 为ListView列表项设置监听
@@ -79,8 +79,7 @@ public class FileActivity extends Activity
                 else
                 {
                     list = getFiles(currentCatalogS);
-                    adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.activity_list_item,
-                            android.R.id.text1, list);
+                    adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.simple_list_item_1, list);
                     listFiles.setAdapter(adapter);
                     currentCatalog.setText(currentCatalogS);
                 }
@@ -94,10 +93,16 @@ public class FileActivity extends Activity
             {
                 File current_file = new File(currentCatalogS);
                 File parent_file = current_file.getParentFile();
-                currentCatalogS = parent_file.getAbsolutePath();
+                if (parent_file != null)
+                {
+                    currentCatalogS = parent_file.getAbsolutePath();
+                }
+                else
+                {
+                    Toast.makeText(FileActivity.this, "苦海无涯，回头是岸", Toast.LENGTH_SHORT).show();
+                }
                 list = getFiles(currentCatalogS);
-                adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.activity_list_item,
-                        android.R.id.text1, list);
+                adapter = new ArrayAdapter<String>(FileActivity.this, android.R.layout.simple_list_item_1, list);
                 listFiles.setAdapter(adapter);
                 currentCatalog.setText(currentCatalogS);
             }
@@ -124,9 +129,12 @@ public class FileActivity extends Activity
                 }
             }
         });
-        for (File temp : files)
+        if (files != null)
         {
-            list.add(temp.getName());
+            for (File temp : files)
+            {
+                list.add(temp.getName());
+            }
         }
         return list;
     }
